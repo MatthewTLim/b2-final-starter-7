@@ -1,0 +1,7 @@
+<% @bulk_discounts.each do |discount| %>
+  <p>Discount Name: <%= link_to "#{discount.name}", merchant_bulk_discount_path(@merchant, discount) %> <%= button_to "Delete", merchant_bulk_discount_path(@merchant, discount), method: :delete %></p>
+  <p>Discount Percentage: <%= discount.percentage %></p>
+  <p>Discount Quantity Threshold: <%= discount.quantity_threshold %></p>
+  <br>
+<% end %>
+<%= link_to "Create a New Discount", new_merchant_bulk_discount_path(@merchant) %>
