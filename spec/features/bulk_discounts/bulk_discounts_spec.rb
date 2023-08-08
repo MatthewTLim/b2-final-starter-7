@@ -9,7 +9,7 @@ describe "Bulk Discounts" do
     @item3 = @m1.items.create(name: "Item 3", description: "Description for Item 3", unit_price: 20.0)
 
     @customer = Customer.create(first_name: "John", last_name: "Doe", address: "123 Main St", city: "Anytown", state: "CA", zip: 12345)
-    @invoice = Invoice.create(customer: @customer, status: 1, created_at: "2012-03-27 14:54:09") # Assuming status 1 is for "completed" invoices
+    @invoice = Invoice.create(customer: @customer, status: 1, created_at: "2012-03-27 14:54:09") 
 
     @invoice.invoice_items.create(item: @item1, quantity: 10, unit_price: @item1.unit_price, status: 2)
     @invoice.invoice_items.create(item: @item2, quantity: 5, unit_price: @item2.unit_price, status: 2)
