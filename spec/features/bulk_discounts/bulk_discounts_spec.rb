@@ -205,4 +205,32 @@ describe "Bulk Discounts" do
       end
     end
   end
+
+  #9: Holidays API
+
+  describe "As a merchant" do
+    describe "When I visit the discounts index page" do
+      describe "I see a section with a header of Upcoming Holidays"do
+        describe "In this section the name and date of the next 3 upcoming US holidays are listed." do
+          it "Use the Next Public Holidays Endpoint in the [Nager.Date API](https://date.nager.at/swagger/index.html)" do
+
+            holidays_response = [
+              { 'name' => 'Holiday 1', 'date' => '2023-08-10' },
+              { 'name' => 'Holiday 2', 'date' => '2023-08-15' },
+              { 'name' => 'Holiday 3', 'date' => '2023-08-20' }
+            ]
+
+            allow(HTTParty).to receive(:get).and_return(double(body: holidays_response.to_json))
+
+            visit merchant_bulk_discounts_path(@m1)
+
+            expect(page).to have_content('Upcoming Holidays')
+            expect(page).to have_content('Holiday 1 - 2023-08-10')
+            expect(page).to have_content('Holiday 2 - 2023-08-15')
+            expect(page).to have_content('Holiday 3 - 2023-08-20')
+          end
+        end
+      end
+    end
+  end
 end
