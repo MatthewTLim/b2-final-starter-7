@@ -115,7 +115,7 @@ describe "Bulk Discounts" do
       it "Then I see the bulk discount's quantity threshold and percentage discount" do
 
         visit merchant_bulk_discount_path(@m1, @discount1)
-        
+
         expect(page).to have_content(@discount1.name)
         expect(page).to have_content(@discount1.percentage)
         expect(page).to have_content(@discount1.quantity_threshold)
@@ -181,9 +181,15 @@ describe "Bulk Discounts" do
 
   # 7: Merchant Invoice Show Page: Link to applied discounts
 
-  # As a merchant
-  # When I visit my merchant invoice show page
-  # Next to each invoice item I see a link to the show page for the bulk discount that was applied (if any)
+  describe "As a merchant" do
+    describe "When I visit my merchant invoice show page" do
+      it "Next to each invoice item I see a link to the show page for the bulk discount that was applied (if any)" do
+        visit merchant_invoice_path(@m1, @invoice)
+
+        expect(page).to have_link("20 percent off", count: 2)
+      end
+    end
+  end
 
   #8: Admin Invoice Show Page: Total Revenue and Discounted Revenue
 
@@ -192,9 +198,37 @@ describe "Bulk Discounts" do
       describe "Then I see the total revenue from this invoice (not including discounts)" do
         it "And I see the total discounted revenue from this invoice which includes bulk discounts in the calculation" do
           visit admin_invoice_path(@invoice)
-          save_and_open_page
+
           expect(page).to have_content("Total Revenue: $575.00")
           expect(page).to have_content("Total Discounted Revenue: 475.0")
+        end
+      end
+    end
+  end
+
+  #9: Holidays API
+
+  describe "As a merchant" do
+    describe "When I visit the discounts index page" do
+      describe "I see a section with a header of Upcoming Holidays"do
+        describe "In this section the name and date of the next 3 upcoming US holidays are listed." do
+          it "Use the Next Public Holidays Endpoint in the [Nager.Date API](https://date.nager.at/swagger/index.html)" do
+
+            holidays_response = [
+              { 'name' => 'Holiday 1', 'date' => '2023-08-10' },
+              { 'name' => 'Holiday 2', 'date' => '2023-08-15' },
+              { 'name' => 'Holiday 3', 'date' => '2023-08-20' }
+            ]
+
+            allow(HTTParty).to receive(:get).and_return(double(body: holidays_response.to_json))
+
+            visit merchant_bulk_discounts_path(@m1)
+
+            expect(page).to have_content('Upcoming Holidays')
+            expect(page).to have_content('Holiday 1 - 2023-08-10')
+            expect(page).to have_content('Holiday 2 - 2023-08-15')
+            expect(page).to have_content('Holiday 3 - 2023-08-20')
+          end
         end
       end
     end

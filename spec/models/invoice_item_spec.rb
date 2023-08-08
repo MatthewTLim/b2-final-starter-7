@@ -39,4 +39,26 @@ RSpec.describe InvoiceItem, type: :model do
       expect(InvoiceItem.incomplete_invoices).to eq([@i1, @i3])
     end
   end
+
+  describe "#bulk_discount_applied?"do
+    it "checks if an item qualifies for a discount and returns the name if applicable" do
+      @m1 = Merchant.create!(name: "Merchant 1")
+      @discount1 = @m1.bulk_discounts.create!(name: "20 percent off", percentage: 20, quantity_threshold: 10 )
+      @item1 = @m1.items.create(name: "Item 1", description: "Description for Item 1", unit_price: 10.0)
+      @item2 = @m1.items.create(name: "Item 2", description: "Description for Item 2", unit_price: 15.0)
+      @item3 = @m1.items.create(name: "Item 3", description: "Description for Item 3", unit_price: 20.0)
+
+      @customer = Customer.create(first_name: "John", last_name: "Doe", address: "123 Main St", city: "Anytown", state: "CA", zip: 12345)
+      @invoice = Invoice.create(customer: @customer, status: 1, created_at: "2012-03-27 14:54:09")
+
+      @invoice.invoice_items.create(item: @item1, quantity: 10, unit_price: @item1.unit_price, status: 2)
+      @invoice.invoice_items.create(item: @item2, quantity: 5, unit_price: @item2.unit_price, status: 2)
+      @invoice.invoice_items.create(item: @item3, quantity: 20, unit_price: @item3.unit_price, status: 2)
+
+      invoice_item = @invoice.invoice_items.first
+      applied_discount = invoice_item.applied_bulk_discount
+      
+      expect(applied_discount).to eq(@discount1)
+    end
+  end
 end

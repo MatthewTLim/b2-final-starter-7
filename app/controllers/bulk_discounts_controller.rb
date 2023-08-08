@@ -1,5 +1,8 @@
+require "httparty"
+
 class BulkDiscountsController < ApplicationController
   def index
+    @upcoming_holidays = get_upcoming_holidays(3)
     @merchant = Merchant.find(params[:merchant_id])
     @bulk_discounts = @merchant.bulk_discounts
   end
@@ -51,5 +54,16 @@ class BulkDiscountsController < ApplicationController
 
   def bulk_discount_params
     params.permit(:name, :percentage, :quantity_threshold)
+  end
+
+  def get_upcoming_holidays(count)
+    response = HTTParty.get("https://date.nager.at/Api/v2/NextPublicHolidaysWorldwide?countryCode=US&n=#{count}")
+    holidays_data = JSON.parse(response.body)
+
+    upcoming_holidays = holidays_data[0...count].map do |holiday|
+      { name: holiday['name'], date: holiday['date'] }
+    end
+
+    upcoming_holidays
   end
 end

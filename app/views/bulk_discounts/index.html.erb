@@ -1,3 +1,12 @@
+<div class="upcoming-holidays">
+  <h2>Upcoming Holidays</h2>
+  <ul>
+    <% @upcoming_holidays.each do |holiday| %>
+      <li><%= "#{holiday[:name]} - #{holiday[:date]}" %></li>
+    <% end %>
+  </ul>
+</div>
+
 <% @bulk_discounts.each do |discount| %>
   <p>Discount Name: <%= link_to "#{discount.name}", merchant_bulk_discount_path(@merchant, discount) %> <%= button_to "Delete", merchant_bulk_discount_path(@merchant, discount), method: :delete %></p>
   <p>Discount Percentage: <%= discount.percentage %></p>

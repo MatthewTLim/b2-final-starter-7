@@ -10,7 +10,7 @@
   </div>
   <br>
 
-  <p> Created on: <%= @invoice.created_at.strftime("%A, %B %-d, %Y") %></p>
+  <p>Created on: <%= @invoice.created_at.strftime("%A, %B %-d, %Y") %></p>
   <p>Total Revenue: <%= @invoice.total_revenue %></p>
   <p>Total Discounted Revenue: <%= @invoice.total_discounted_revenue %></p>
 
@@ -42,6 +42,11 @@
                 <%= f.select :status, Invoice.statuses.keys, selected: "#{@invoice.status}" %>
                 <%= f.submit 'Update Invoice' %>
               <% end %>
+                <% if i.applied_bulk_discount %>
+                  <%= link_to "#{i.applied_bulk_discount.name}", merchant_invoice_path(i.applied_bulk_discount) %>
+                <% else %>
+                  No Discount
+                <% end %>
               </td>
           </tr>
         </section>

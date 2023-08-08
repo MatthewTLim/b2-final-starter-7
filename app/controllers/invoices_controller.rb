@@ -17,6 +17,7 @@ class InvoicesController < ApplicationController
   end
 
   private
+
   def invoice_params
     params.require(:invoice).permit(:status)
   end
@@ -25,7 +26,7 @@ class InvoicesController < ApplicationController
     @invoice = Invoice.find(params[:id])
     @merchant = Merchant.find(params[:merchant_id])
   end
-
+  
   def find_merchant
     @merchant = Merchant.find(params[:merchant_id])
   end
