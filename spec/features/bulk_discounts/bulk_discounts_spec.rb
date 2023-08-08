@@ -115,7 +115,7 @@ describe "Bulk Discounts" do
       it "Then I see the bulk discount's quantity threshold and percentage discount" do
 
         visit merchant_bulk_discount_path(@m1, @discount1)
-        save_and_open_page
+        
         expect(page).to have_content(@discount1.name)
         expect(page).to have_content(@discount1.percentage)
         expect(page).to have_content(@discount1.quantity_threshold)
@@ -179,7 +179,24 @@ describe "Bulk Discounts" do
     end
   end
 
-  
+  # 7: Merchant Invoice Show Page: Link to applied discounts
 
+  # As a merchant
+  # When I visit my merchant invoice show page
+  # Next to each invoice item I see a link to the show page for the bulk discount that was applied (if any)
 
+  #8: Admin Invoice Show Page: Total Revenue and Discounted Revenue
+
+  describe "As an admin" do
+    describe "When I visit an admin invoice show page" do
+      describe "Then I see the total revenue from this invoice (not including discounts)" do
+        it "And I see the total discounted revenue from this invoice which includes bulk discounts in the calculation" do
+          visit admin_invoice_path(@invoice)
+          save_and_open_page
+          expect(page).to have_content("Total Revenue: $575.00")
+          expect(page).to have_content("Total Discounted Revenue: 475.0")
+        end
+      end
+    end
+  end
 end
