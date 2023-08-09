@@ -9,9 +9,9 @@ RSpec.describe Invoice, type: :model do
 
   describe "relationships" do
     it { should belong_to :customer }
+    it { should have_many :transactions}
     it { should have_many(:items).through(:invoice_items) }
     it { should have_many(:merchants).through(:items) }
-    it { should have_many :transactions}
   end
 
   describe "instance methods" do
@@ -28,7 +28,7 @@ RSpec.describe Invoice, type: :model do
     end
 
   end
-  
+
   describe "#total_discounted_revenue" do
     it "applies the discount to the item that meets the quantity threshold" do
       @merchant1 = Merchant.create!(name: 'Hair Care')

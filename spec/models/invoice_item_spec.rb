@@ -11,6 +11,7 @@ RSpec.describe InvoiceItem, type: :model do
   describe "relationships" do
     it { should belong_to :invoice }
     it { should belong_to :item }
+    
   end
 
   describe "class methods" do
@@ -57,7 +58,7 @@ RSpec.describe InvoiceItem, type: :model do
 
       invoice_item = @invoice.invoice_items.first
       applied_discount = invoice_item.applied_bulk_discount
-      
+
       expect(applied_discount).to eq(@discount1)
     end
   end

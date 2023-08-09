@@ -5,12 +5,12 @@ describe Merchant do
     it { should validate_presence_of :name }
   end
   describe "relationships" do
-    it { should have_many :items }
+    it { should have_many(:items) }
     it { should have_many(:invoice_items).through(:items) }
-    it {should have_many(:invoices).through(:invoice_items)}
+    it { should have_many(:invoices).through(:invoice_items) }
     it { should have_many(:customers).through(:invoices) }
     it { should have_many(:transactions).through(:invoices) }
-
+    it { should have_many(:bulk_discounts) }
   end
 
   describe "class methods" do
@@ -164,7 +164,7 @@ describe Merchant do
       expect(@merchant2.enabled_items).to eq([])
     end
 
-    it "disabled_items" do 
+    it "disabled_items" do
       expect(@merchant1.disabled_items).to eq([@item_2, @item_3, @item_4, @item_7, @item_8])
       expect(@merchant2.disabled_items).to eq([@item_5, @item_6])
     end
