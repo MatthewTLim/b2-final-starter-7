@@ -1,5 +1,3 @@
-require "httparty"
-
 class BulkDiscountsController < ApplicationController
   def index
     @upcoming_holidays = get_upcoming_holidays(3)
